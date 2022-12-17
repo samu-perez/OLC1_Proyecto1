@@ -1,0 +1,45 @@
+Console.Write("Hola mundo");
+console.write("Hola mundo" + 5 + 5);
+
+if(a >5){
+  Console.Write("a >5");
+} else if(a < 5) {
+  Console.Write("a < 5");
+  Console.Write("a ");
+  Console.Write("5");
+} else if(a < 5) {
+  Console.Write("a < 5");
+  Console.Write("5");
+} else if(a < 5) {
+  Console.Write("5");
+} else {
+  Console.Write("else");
+  int var = 5*5;
+}
+
+while(a < 10){
+  Console.Write("el valor de a es: " + a);
+  int var = 5-5;
+}
+
+int a = 1;
+do {
+  Console.Write("el valor de a es: " + a);
+  a = a + 1;
+} while(a < 5);
+
+void myMetodo ( ){
+  if(a >5){
+    Console.Write("a >5");
+  }
+  Console.Write("el valor de a es: " + a);
+  while(a < 10){
+    Console.Write("el valor de a es: " + a);
+    int var = 5-5;
+  }
+}
+
+void mifuncion(int a, int b){
+  string var = "parametro";
+  Console.Write("el valor de a es: " + a);
+}
