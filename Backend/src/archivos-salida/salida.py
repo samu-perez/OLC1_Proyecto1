@@ -1,7 +1,8 @@
 a = 4
+a = 4
 v_1 = "Marcos Alberto Santos Aquino"
-v_2 = true
-v_3 = false
+v_2 = True
+v_3 = False
 v_5 = '%'
 l = 45.53232432999999
 def id(a, b, c):
@@ -11,16 +12,6 @@ else:
 	print("B no esta aceptada")
 
 	return
-
-def id(a, b, c):
-	if a > b and b < c:
-	print("B esta en los limites exactos: ->" , b)
-	return "hola mundo"
-else:
-	print("B no esta aceptada")
-	return "hola mundo"
-
-	return "0"
 
 def main():
 	def switch(valor):
@@ -46,7 +37,7 @@ elif precio < 0:
 	for a in range(20, 10, -1):
 	print("el valor de a es: " , a)
 
-	while a < 10 or  not  not  not true:
+	while a < 10 or  not  not  not True:
 	print("el valor de a es: " , a)
 
 if __name__ == '__main__':

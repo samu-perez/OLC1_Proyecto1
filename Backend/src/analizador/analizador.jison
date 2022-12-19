@@ -1,4 +1,14 @@
 /* ======================================= IMPORTACIONES ========================================== */
+%{
+    const TIPO_OPERACION = require('../controllers/enums/tipoOperacion')
+    const TIPO_VALOR = require('../controllers/enums/tipoValor')
+    const TIPO_DATO = require('../controllers/enums/tipoDato')
+    const INSTRUCCION = require('../controllers/instrucciones/instruccion')
+    const VarStatic = require('../controllers/simbolos/static')
+%}
+
+
+/* ======================================= LÉXICO ========================================== */
 
 /* lexical grammar */
 %lex
@@ -34,7 +44,6 @@
 "case"                  return 'Rcase'
 "default"               return 'Rdefault'
 
-
 [0-9]+("."[0-9]+)\b     return 'decimal'
 "."                     return 'punto'
 [0-9]+\b                return 'entero'
@@ -66,7 +75,6 @@
 "["                     return 'corchA'
 "]"                     return 'corchC'
 
-
 ([a-zA-Z])([a-zA-Z0-9_])*               return 'identificador'
 ["\""]([^"\""])*["\""]                  return 'string'
 ["\'"]([^"\'"])*["\'"]                  return 'char'
@@ -79,13 +87,8 @@
 
 /lex
 
-%{
-    const TIPO_OPERACION = require('../controllers/enums/tipoOperacion')
-    const TIPO_VALOR = require('../controllers/enums/tipoValor')
-    const TIPO_DATO = require('../controllers/enums/tipoDato')
-    const INSTRUCCION = require('../controllers/instrucciones/instruccion')
-    const VarStatic = require('../controllers/simbolos/static')
-%}
+
+/* ======================================= SINTÁCTICO ========================================== */
 
 /* operator associations and precedence */
 %left 'or'
@@ -254,8 +257,8 @@ EXPRESION: EXPRESION mas EXPRESION {$$ = INSTRUCCION.nuevaOperacionBinaria($1, $
     | parA EXPRESION parC {$$ = $2}
     | decimal {$$ = INSTRUCCION.nuevoValor(Number($1), TIPO_VALOR.DECIMAL, this._$.first_line, this._$.first_column+1);}
     | entero {$$ = INSTRUCCION.nuevoValor(Number($1), TIPO_VALOR.ENTERO, this._$.first_line, this._$.first_column+1);}
-    | Rtrue {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);}
-    | Rfalse {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);}
+    | Rtrue {$$ = INSTRUCCION.nuevoValor('True', TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);}
+    | Rfalse {$$ = INSTRUCCION.nuevoValor('False', TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);}
     | string {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CADENA, this._$.first_line, this._$.first_column+1);}
     | identificador {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.IDENTIFICADOR, this._$.first_line, this._$.first_column+1);}
     | char {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CHAR, this._$.first_line, this._$.first_column+1);}

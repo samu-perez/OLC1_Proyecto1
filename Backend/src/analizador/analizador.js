@@ -284,8 +284,11 @@ break;
 case 86:
 this.$ = INSTRUCCION.nuevoValor(Number($$[$0]), TIPO_VALOR.ENTERO, this._$.first_line, this._$.first_column+1);
 break;
-case 87: case 88:
-this.$ = INSTRUCCION.nuevoValor($$[$0], TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);
+case 87:
+this.$ = INSTRUCCION.nuevoValor('True', TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);
+break;
+case 88:
+this.$ = INSTRUCCION.nuevoValor('False', TIPO_VALOR.BOOL, this._$.first_line, this._$.first_column+1);
 break;
 case 89:
 this.$ = INSTRUCCION.nuevoValor($$[$0], TIPO_VALOR.CADENA, this._$.first_line, this._$.first_column+1);

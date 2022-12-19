@@ -20,12 +20,6 @@ export class AppComponent {
 
   }
 
-  //title = 'Frontend';
-
-  ngOnInit(): void {
-    
-  }
-
   traducir(){
     const entrada = this.textEntrada.nativeElement.value
     if(entrada == "") return
