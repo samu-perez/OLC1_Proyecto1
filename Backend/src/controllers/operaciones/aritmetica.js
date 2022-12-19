@@ -7,19 +7,14 @@ const aritmetica = (expresion) => {
         expresion.tipo === TIPO_VALOR.BOOL || expresion.tipo === TIPO_VALOR.CADENA || expresion.tipo === TIPO_VALOR.IDENTIFICADOR){
         return valorExpresion(expresion)
     }else if(expresion.tipo === TIPO_OPERACION.SUMA){
-        console.log('*SUMA*')
         return suma(expresion.opIzq, expresion.opDer)
     } else if(expresion.tipo === TIPO_OPERACION.RESTA){
-        console.log('*RESTA*')
         return resta(expresion.opIzq, expresion.opDer)
     } else if(expresion.tipo === TIPO_OPERACION.MULTIPLICACION){
-        console.log('*MULTIPLICACION*')
         return multiplicacion(expresion.opIzq, expresion.opDer)
     } else if(expresion.tipo === TIPO_OPERACION.DIVISION){
-        console.log('*DIVISION*')
         return division(expresion.opIzq, expresion.opDer)
     } else if(expresion.tipo === TIPO_OPERACION.NEGATIVO){
-        console.log('*NEGATIVO*')
         return negativo(expresion.opDer)
     } 
 }
@@ -29,7 +24,6 @@ function suma(expresionOpIzq, expresionOpDer){
     const opDer = aritmetica(expresionOpDer)
     
     const resultado = opIzq.valor  + " + " + opDer.valor
-    console.log('RESULT SUMA:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -43,7 +37,6 @@ function resta(expresionOpIzq, expresionOpDer){
     const opDer = aritmetica(expresionOpDer)
     
     const resultado = opIzq.valor  + " - " + opDer.valor
-    console.log('RESULT RESTA:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -57,7 +50,6 @@ function multiplicacion(expresionOpIzq, expresionOpDer){
     const opDer = aritmetica(expresionOpDer)
     
     const resultado = opIzq.valor  + " * " + opDer.valor
-    console.log('RESULT MULTIPLICACION:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -71,7 +63,6 @@ function division(expresionOpIzq, expresionOpDer){
     const opDer = aritmetica(expresionOpDer)
     
     const resultado = opIzq.valor  + " / " + opDer.valor
-    console.log('RESULT DIVISION:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -84,7 +75,6 @@ function negativo(expresionOpDer){
     const opDer = aritmetica(expresionOpDer)
     
     const resultado = "-" + opDer.valor
-    console.log('RESULT DIVISION:', resultado)
     return {
         valor: resultado,
         tipo: opDer.tipo,

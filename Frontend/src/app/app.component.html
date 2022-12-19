@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">OLC Proyecto 1</a>
+    <a class="navbar-brand" href="#">OLC1 Proyecto 1</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,8 +9,11 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Archivo</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Nuevo</a></li>
-            <li><a class="dropdown-item" href="#">Abrir</a></li>
+            <li><a class="dropdown-item" href="#" (click)="limpiar()">Nuevo</a></li>
+            <li>
+              <input type="file" id="file" class="d-none" accept=".cs, .txt" (change)="handleFileInput($event)">
+              <label class="dropdown-item" for="file">Abrir</label>
+            </li>
             <li><a class="dropdown-item" href="#">Guardar</a></li>
             <li><a class="dropdown-item" href="#">Guardar Como</a></li>
             <!-- <li><hr class="dropdown-divider"></li>
@@ -30,55 +33,73 @@
   <div class="row">
 
     <div class="col-6">
-      <div class="row g-5">
+      <div class="row g-3">
         <div class="col-sm-12">
-          <textarea #textEntrada class="form-control bg-dark text-info border border-white-5" rows="18"></textarea>
+          <textarea #textEntrada class="form-control bg-dark text-info border border-white-5" rows="20" placeholder="Código C#..."></textarea>
           <button class="btn btn-primary ps-5 pe-5 mt-3" style="float: right;" (click)="traducir()">Traducir</button>
         </div>
+
         <div class="col-sm-12">
+          <h4 class="text-info">Tabla de Simbolos</h4>
           <div class="table-responsive">
-            <table class="table table-dark table-striped table-hover table-bordered">
+            <table class="table table-dark table-striped table-hover table-bordered text-center">
               <thead class="table-info">
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Valor</th>
+                  <th scope="col">Tipo Dato</th>
+                  <th scope="col">Tipo Simbolo</th>
+                  <th scope="col">Linea</th>
+                  <th scope="col">Columna</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Larry</td>
-                  <td>Bird</td>
-                  <td>@twitter</td>
+                <tr *ngFor="let simbolo of tablaSimbolos">
+                  <td>{{simbolo.id}}</td>
+                  <td>{{simbolo.valor}}</td>
+                  <td>{{simbolo.tipoDato}}</td>
+                  <td>{{simbolo.tipoSimbolo}}</td>
+                  <td>{{simbolo.linea}}</td>
+                  <td>{{simbolo.columna}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
     </div>
 
     <div class="col-6">
       <div class="mb-5">
-        <textarea #textSalidaPython class="form-control text-light border border-white-5" rows="18" placeholder="Código Python..." disabled style="background-color: #252526;"></textarea>
+        <textarea #textSalidaPython class="form-control text-light border border-white-5" rows="20" placeholder="Código Python..." disabled style="background-color: #252526;"></textarea>
       </div>
-      <div class="mb-5">
-        <textarea class="form-control text-info border border-white-5" rows="12" placeholder="HTML..." disabled style="background-color: #252526;"></textarea>
+      <div class="mb-4">
+        <textarea #textSalidaHTML class="form-control text-warning border border-white-5" rows="11" placeholder="HTML..." disabled style="background-color: #252526;"></textarea>
       </div>
+      
+      <h4 class="text-danger">Tabla de Errores</h4>
+      <div class="table-responsive">
+        <table class="table table-dark table-striped table-hover table-bordered text-center">
+          <thead class="table-info">
+            <tr>
+              <th scope="col">Tipo Error</th>
+              <th scope="col">Línea</th>
+              <th scope="col">Columna</th>
+              <th scope="col">Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let error of listaErrores">
+              <td>{{error.tipoError}}</td>
+              <td>{{error.linea}}</td>
+              <td>{{error.columna}}</td>
+              <td>{{error.descripcion}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>

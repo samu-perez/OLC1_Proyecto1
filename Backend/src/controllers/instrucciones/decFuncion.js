@@ -1,11 +1,11 @@
 const Simbolo = require('../simbolos/simbolo')
 const VarStatic = require('../simbolos/static')
 
-const decMetodo = (instruccion) => {
+const decFuncion = (instruccion) => {
     const bloque = require('../analisis.controller').bloque
     const traduccionBloque = bloque(instruccion.instrucciones)
 
-    const nuevoSimbolo = new Simbolo(instruccion.id, 'NA', 'VOID', 'DEC_METODO', instruccion.linea, instruccion.columna)
+    const nuevoSimbolo = new Simbolo(instruccion.id, 'NA', instruccion.tipoFunc, 'DEC_FUNCION', instruccion.linea, instruccion.columna)
     VarStatic.tablaSimbolos.push(nuevoSimbolo)
 
     if(instruccion.lista_parametros == null){
@@ -21,4 +21,4 @@ const decMetodo = (instruccion) => {
     }
 }
 
-module.exports = decMetodo
+module.exports = decFuncion

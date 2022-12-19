@@ -1,4 +1,4 @@
-/* description: Parses end executes mathematical expressions. */
+/* ======================================= IMPORTACIONES ========================================== */
 
 /* lexical grammar */
 %lex
@@ -11,7 +11,7 @@
 
 "int"                   return 'Rint'
 "double"                return 'Rdouble'
-"boolean"               return 'Rboolean'
+"bool"                  return 'Rboolean'
 "char"                  return 'Rchar'
 "string"                return 'Rstring'
 
@@ -25,6 +25,14 @@
 "while"                 return 'Rwhile'
 "do"                    return 'Rdo'
 "void"                  return 'Rvoid'
+"main"                  return 'Rmain'
+"return"                return 'Rreturn'
+"break"                 return 'Rbreak'
+"continue"              return 'Rcontinue'
+"for"                   return 'Rfor'
+"switch"                return 'Rswitch'
+"case"                  return 'Rcase'
+"default"               return 'Rdefault'
 
 
 [0-9]+("."[0-9]+)\b     return 'decimal'
@@ -64,8 +72,9 @@
 ["\'"]([^"\'"])*["\'"]                  return 'char'
 
 <<EOF>>                 return 'EOF'    // Fin de archivo
-. {    
+. { 
     console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+    VarStatic.listaErrores.push({tipoError: 'Léxico', linea: yylloc.first_line, columna: yylloc.first_column, descripcion: 'El carácter ' + yytext + ' no pertenece al lenguaje.'})
 }
 
 /lex
@@ -75,6 +84,7 @@
     const TIPO_VALOR = require('../controllers/enums/tipoValor')
     const TIPO_DATO = require('../controllers/enums/tipoDato')
     const INSTRUCCION = require('../controllers/instrucciones/instruccion')
+    const VarStatic = require('../controllers/simbolos/static')
 %}
 
 /* operator associations and precedence */
@@ -94,24 +104,47 @@
 INICIO: INSTRUCCIONES EOF{return $1;}
 ;
 
+/*INICIO: INSTRUCCIONES EOF { return {ast: $1, erroresLexicos: erroresLexicos} }
+;*/
+
 INSTRUCCIONES: INSTRUCCIONES INSTRUCCION {$$ = $1; $1.push($2);}
     | INSTRUCCION {$$ = [$1];}
+    //| error INSTRUCCION { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+    
 ;
 
-INSTRUCCION: DEC_VAR ptcoma {$$ = $1;}                          // DECLARACION DE VARIABLE
-    | ASIG_VAR ptcoma {$$ = $1;}                                // ASIGNACION DE VARIABLE
+INSTRUCCION: DEC_VAR {$$ = $1;}                          // DECLARACION DE VARIABLE
+    | ASIG_VAR {$$ = $1;}                                // ASIGNACION DE VARIABLE
     | PRINT {$$ = $1;}
     | IF {$$ = $1;}
     | WHILE {$$ = $1;}
     | DOWHILE {$$ = $1;}
     | METODO {$$ = $1;}
+    | FUNCION {$$ = $1;}
+    | MAIN {$$ = $1;}
+    | RETURN {$$ = $1;}
+    | BREAK {$$ = $1;}
+    | CONTINUE {$$ = $1;}
+    | FOR {$$ = $1;}
+    | SWITCH {$$ = $1;}
+    | error DEC_VAR { console.error('DEC_VAR - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: DEC_VAR'})}
+    | error ASIG_VAR { console.error('ASIG_VAR - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: ASIG_VAR'})}
+    | error PRINT { console.error('PRINT - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: PRINT'})}
+    | error IF { console.error('IF - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: IF'})}
+    | error WHILE { console.error('WHILE - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: WHILE'})}
+    | error DOWHILE { console.error('DOWHILE - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: DOWHILE'})}
+    | error METODO { console.error('METODO - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: METODO'})}
+    | error FUNCION { console.error('FUNCION - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: FUNCION'})}
+    | error MAIN { console.error('MAIN - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: MAIN'})}
+    | error FOR { console.error('FOR - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: FOR'})}
+    | error SWITCH { console.error('SWITCH - Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column+1); VarStatic.listaErrores.push({tipoError: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column+1, descripcion: 'Error en Instrucción: SWITCH'})}
 ;
 
-DEC_VAR: TIPO identificador  { $$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line, this._$.first_column+1) }
-    | TIPO identificador igual EXPRESION  { $$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1) }
+DEC_VAR: TIPO identificador ptcoma { $$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line, this._$.first_column+1) }
+    | TIPO identificador igual EXPRESION ptcoma { $$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1) }
 ;
 
-ASIG_VAR: identificador igual EXPRESION {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}    
+ASIG_VAR: identificador igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}    
 ;
 
 PRINT: Rconsole punto Rwrite parA EXPRESION parC ptcoma {$$ = INSTRUCCION.nuevoPrint($5, this._$.first_line, this._$.first_column+1)}
@@ -136,8 +169,27 @@ WHILE: Rwhile parA EXPRESION parC llaveA INSTRUCCIONES llaveC  {$$ = INSTRUCCION
 DOWHILE: Rdo llaveA INSTRUCCIONES llaveC Rwhile parA EXPRESION parC ptcoma {$$ = INSTRUCCION.nuevoDoWhile($7, $3, this._$.first_line, this._$.first_column+1)}
 ;
 
+FOR: Rfor parA INICIOFOR FINFOR INCREMENTO_DECREMENTO parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoFor($3, $4, $5, $8, this._$.first_line, this._$.first_column+1)}
+;
+
+INICIOFOR: DEC_VAR {$$ = $1;}
+    | ASIG_VAR {$$ = $1;}
+;
+
+FINFOR: EXPRESION ptcoma {$$ = $1;}
+;
+
+INCREMENTO_DECREMENTO: identificador masmas {$$ = INSTRUCCION.nuevoIncrementoDecremento($1, TIPO_OPERACION.INCREMENTO, this._$.first_line, this._$.first_column+1);}
+    | identificador menosmenos {$$ = INSTRUCCION.nuevoIncrementoDecremento($1, TIPO_OPERACION.DECREMENTO, this._$.first_line, this._$.first_column+1);}
+;
+
+
 METODO: Rvoid identificador parA parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoMetodo($2, null, $6, this._$.first_line, this._$.first_column+1)}
-    | Rvoid identificador parA LIST_PARAMETROS parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoMetodo($2, $4, $7, this._$.first_line,this._$.first_column+1)}
+    | Rvoid identificador parA LIST_PARAMETROS parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoMetodo($2, $4, $7, this._$.first_line, this._$.first_column+1)}
+;
+
+FUNCION: TIPO identificador parA parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevaFuncion($1, $2, null, $6, this._$.first_line, this._$.first_column+1)}
+    | TIPO identificador parA LIST_PARAMETROS parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevaFuncion($1, $2, $4, $7, this._$.first_line, this._$.first_column+1)}
 ;
 
 LIST_PARAMETROS: LIST_PARAMETROS coma PARAMETRO {$$ = $1; $1.push($3);}
@@ -146,6 +198,34 @@ LIST_PARAMETROS: LIST_PARAMETROS coma PARAMETRO {$$ = $1; $1.push($3);}
 
 PARAMETRO: TIPO identificador {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line, this._$.first_column+1);}
 ;
+
+MAIN: Rvoid Rmain parA parC llaveA INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoMain($6, this._$.first_line, this._$.first_column+1)}
+;
+
+
+SWITCH: Rswitch parA EXPRESION parC llaveA LIST_CASES llaveC {$$ = INSTRUCCION.nuevoSwitchCase($3, $6, null, this._$.first_line, this._$.first_column+1)}
+    | Rswitch parA EXPRESION parC llaveA LIST_CASES Rdefault dospuntos INSTRUCCIONES llaveC {$$ = INSTRUCCION.nuevoSwitchCase($3, $6, $9, this._$.first_line, this._$.first_column+1);}
+    //| Rswitch parA EXPRESION parC llaveA Rdefault dospuntos INSTRUCCIONES llaveC {$$= new INSTRUCCION.nuevoSwitchDefault($3, $8, this._$.first_line,this._$.first_column+1)}
+;
+
+LIST_CASES: LIST_CASES CASE {$1.push($2); $$ = $1;}
+    | CASE {$$ = [$1];}
+;
+
+CASE: Rcase EXPRESION dospuntos INSTRUCCIONES {$$ = INSTRUCCION.nuevoCase($2, $4, this._$.first_line, this._$.first_column+1)}
+;
+
+
+RETURN: Rreturn ptcoma {$$ = INSTRUCCION.nuevoReturn(null, this._$.first_line, this._$.first_column+1)}
+    | Rreturn EXPRESION ptcoma {$$ = INSTRUCCION.nuevoReturn($2, this._$.first_line, this._$.first_column+1)}
+;
+
+BREAK: Rbreak ptcoma {$$ = INSTRUCCION.nuevoBreak(this._$.first_line, this._$.first_column+1)}
+;
+
+CONTINUE: Rcontinue ptcoma {$$ = INSTRUCCION.nuevoContinue(this._$.first_line, this._$.first_column+1)}
+;
+
 
 TIPO: Rint{$$ = TIPO_DATO.ENTERO}
     | Rdouble{$$ = TIPO_DATO.DECIMAL}

@@ -120,6 +120,79 @@ const instruccion = {
             linea: _linea,
             columna: _columna
         }
+    }, nuevaFuncion: (_tipoFunc, _id, _lista_parametros, _instrucciones, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.DEC_FUNCION,
+            tipoFunc: _tipoFunc,
+            id: _id,
+            lista_parametros: _lista_parametros,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoMain: (_instrucciones, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.MAIN,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoReturn: (_expresion, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.RETURN,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoBreak: (_linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.BREAK,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoContinue: (_linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.CONTINUE,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoIncrementoDecremento: (_id, _tipoIncDec, _linea, _columna) => {
+        return {
+            tipo_dato: TIPO_INSTRUCCION.INCREMENTO_DECREMENTO,
+            id: _id,
+            tipoIncDec: _tipoIncDec,
+            linea: _linea,
+            columna: _columna
+
+        }
+    }, nuevoFor: (_inicio, _condicion, _actualizacion, _instrucciones, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.FOR,
+            inicio: _inicio,
+            condicion: _condicion,
+            actualizacion: _actualizacion,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    }, nuevoSwitchCase: (_expresion, _lista_case, _instruccionesDefault, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.SWITCH,
+            expresion: _expresion,
+            lista_case: _lista_case,
+            instruccionesDefault: _instruccionesDefault,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+    nuevoCase: (_expresion, _instruccionesCase, _linea, _columna) => {
+        return {
+            tipo: TIPO_INSTRUCCION.CASE,
+            expresion: _expresion,
+            instruccionesCase: _instruccionesCase,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 

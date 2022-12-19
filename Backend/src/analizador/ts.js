@@ -1,1 +1,0 @@
-const t = require('../controllers/enums/tipoDato')

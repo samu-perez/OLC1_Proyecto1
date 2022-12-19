@@ -1,16 +1,23 @@
 const operacion = require('../operaciones/operacion')
+const Simbolo = require('../simbolos/simbolo')
+const VarStatic = require('../simbolos/static')
 
 const declaracion = (instruccion) => {
     
-    let traduccion = ""
     if(instruccion.expresion == null){
-        traduccion = instruccion.id + " = None" 
-        console.log('Traduccion Declaracion:', traduccion)
+        const traduccion = instruccion.id + " = None" 
+
+        const nuevoSimbolo = new Simbolo(instruccion.id, 'null', instruccion.tipo_dato, 'DEC_VARIABLE', instruccion.linea, instruccion.columna)
+        VarStatic.tablaSimbolos.push(nuevoSimbolo)
+
         return traduccion
     } else {
         const valorOp = operacion(instruccion.expresion)
-        traduccion = instruccion.id + " = " + valorOp.valor
-        console.log('Traduccion Declaracion:', traduccion)
+        const traduccion = instruccion.id + " = " + valorOp.valor
+
+        const nuevoSimbolo = new Simbolo(instruccion.id, valorOp.valor, instruccion.tipo_dato, 'DEC_VARIABLE', instruccion.linea, instruccion.columna)
+        VarStatic.tablaSimbolos.push(nuevoSimbolo)
+
         return traduccion
     }
 }

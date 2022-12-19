@@ -24,7 +24,6 @@ function or(expresionOpIzq, expresionOpDer){
     const opDer = logica(expresionOpDer)
 
     const resultado = opIzq.valor  + " or " + opDer.valor
-    //console.log('RESULT OR:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -38,7 +37,6 @@ function and(expresionOpIzq, expresionOpDer){
     const opDer = logica(expresionOpDer)
 
     const resultado = opIzq.valor  + " and " + opDer.valor
-    //console.log('RESULT AND:', resultado)
     return {
         valor: resultado,
         tipo: opIzq.tipo,
@@ -51,7 +49,6 @@ function not(expresionOpDer){
     const opDer = logica(expresionOpDer)
 
     const resultado = " not " + opDer.valor
-    //console.log('RESULT NOT:', resultado)
     return {
         valor: resultado,
         tipo: opDer.tipo,

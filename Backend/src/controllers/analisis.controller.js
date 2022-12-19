@@ -9,54 +9,69 @@ const sentenciaIfElseIf = require('./instrucciones/ifElseIf')
 const cicloWhile = require('./instrucciones/while')
 const cicloDoWhile = require('./instrucciones/doWhile')
 const decMetodo = require('./instrucciones/decMetodo')
+const decFuncion = require('./instrucciones/decFuncion')
+const main = require('./instrucciones/main')
+const sentenciaReturn = require('./instrucciones/return')
+const cicloFor = require('./instrucciones/for')
+const sentenciaSwitch = require('./instrucciones/switch')
 
+const VarStatic = require('./simbolos/static')
 
 const traducir = (req, res) => {
     const {entrada} = req.body
-    console.log('ENTRADA:', entrada)
+    //console.log('ENTRADA:', entrada)
+
+    VarStatic.listaErrores = []
     const ast = parser.parse(entrada)
-    console.log('AST:', ast)
-    console.log('===========================================')
+    //console.log('AST:', ast)
+    //console.log('===========================================')
+
     const traduccion_ = traduccion(ast)
     res.json(traduccion_)
 }
 
 const traduccion = (instrucciones) => {
-    let salida = ""
+    let salidaPython = ""
+    VarStatic.salidaHTML = ""
+    VarStatic.tablaSimbolos = []
     
     instrucciones.forEach(instruccion => {
         if(instruccion.tipo === TIPO_INSTRUCCION.DECLARACION){
-            console.log('Esta es una DECLARACION:', instruccion)
-            salida += declaracion(instruccion) + "\n"
+            salidaPython += declaracion(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.ASIGNACION){
-            console.log('Esta es una ASIGNACION:', instruccion)
-            salida += asignacion(instruccion) + "\n"
+            salidaPython += asignacion(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.PRINT){
-            console.log('Este es un PRINT:', instruccion)
-            salida += print(instruccion) + "\n"
+            salidaPython += print(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.IF){
-            console.log('Este es un IF:', instruccion)
-            salida += sentenciaIf(instruccion) + "\n"
+            salidaPython += sentenciaIf(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE){
-            console.log('Este es un IF ELSE:', instruccion)
-            salida += sentenciaIfElse(instruccion) + "\n"
+            salidaPython += sentenciaIfElse(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE_IF){
-            console.log('Este es un IF ELSE IF:', instruccion)
-            salida += sentenciaIfElseIf(instruccion) + "\n"
+            salidaPython += sentenciaIfElseIf(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.WHILE){
-            console.log('Este es un WHILE:', instruccion)
-            salida += cicloWhile(instruccion) + "\n"
+            salidaPython += cicloWhile(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.DOWHILE){
-            console.log('Este es un DO WHILE:', instruccion)
-            salida += cicloDoWhile(instruccion) + "\n"
+            salidaPython += cicloDoWhile(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.DEC_METODO){
-            console.log('Este es una DEC METODO:', instruccion)
-            salida += decMetodo(instruccion) + "\n"
+            salidaPython += decMetodo(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.DEC_FUNCION){
+            salidaPython += decFuncion(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.MAIN){
+            salidaPython += main(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.FOR){
+            salidaPython += cicloFor(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.SWITCH){
+            salidaPython += sentenciaSwitch(instruccion) + "\n"
         }
     })
 
+    crearArchivosSalida(salidaPython, VarStatic.salidaHTML)
+
     return {
-        salidaPython: salida
+        salidaPython: salidaPython,
+        salidaHTML: VarStatic.salidaHTML,
+        tablaSimbolos: VarStatic.tablaSimbolos,
+        listaErrores: VarStatic.listaErrores
     }
 }
 
@@ -79,9 +94,35 @@ const bloque = (instrucciones) => {
             salida += "\t" + cicloWhile(instruccion) + "\n"
         } else if(instruccion.tipo === TIPO_INSTRUCCION.DOWHILE){
             salida += "\t" + cicloDoWhile(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.RETURN){
+            salida += "\t" + sentenciaReturn(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.BREAK){
+            salida += "\t" + "break" + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.CONTINUE){
+            salida += "\t" + "continue" + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.FOR){
+            salida += "\t" + cicloFor(instruccion) + "\n"
+        } else if(instruccion.tipo === TIPO_INSTRUCCION.SWITCH){
+            salida += "\t" + sentenciaSwitch(instruccion) + "\n"
         }
     })
     return salida
+}
+
+const crearArchivosSalida = (salidaPython, salidaHTML) => {
+    const fs = require('fs');
+    fs.writeFile("src/archivos-salida/salida.py", salidaPython, function(err) {
+        if (err) {
+          return console.log('Error - archivo salidaPython');
+        }
+        console.log("El archivo salidaPython fue creado correctamente");
+    });
+    fs.writeFile("src/archivos-salida/salida.html", salidaHTML, function(err) {
+        if (err) {
+          return console.log('Error - archivo salidaHTML');
+        }
+        console.log("El archivo salidaHTML fue creado correctamente");
+    });
 }
 
 module.exports = {
