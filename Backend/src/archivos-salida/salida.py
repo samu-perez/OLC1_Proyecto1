@@ -1,49 +1,54 @@
-a = 4
-a = 4
-v_1 = "Marcos Alberto Santos Aquino"
-v_2 = True
-v_3 = False
-v_5 = '%'
-l = 45.53232432999999
-def id(a, b, c):
-	if a > b and b < c:
-	print("B esta en los limites exactos: ->" , b)
+print("<!DOCTYPE html> <html> <head><title>Mi Pagina</title>
+
+</head>
+<body>','<h2>[OLC1]<proyecto1> 1</h2>
+<div style='background:yellow'>
+	<h3>Encabezado h3</h3>
+	<p>
+		Este es un bloque <br>
+		de texto,para una<br>
+		prueba.
+	</p>
+	<br>
+</div>")
+print("Hola mundo")
+print("Hola mundo" , 5 , 5)
+if a > 5:
+	print("a >5")
+elif a < 5:
+	print("a < 5")
+	print("a ")
+	print("5")
+elif a < 5:
+	print("a < 5")
+	print("5")
+elif a < 5:
+	print("5")
 else:
-	print("B no esta aceptada")
+	print("else")
+	var = 5 * 5
 
-	return
-
-def main():
-	def switch(valor):
-	switcher = {
-	1:  precio = 55
-	if precio > 30 or precio < 100 and precio >= 0:
-	print("Datos aceptado" , " si si" , " seguimos")
-elif precio < 0:
-	print("EL precio es 0 :'(")
-
-	break
-	break,
-	2:  precio = 25,
-	3:  precio = 40
-	break,
-	'default':	print("No válido. Escoja 1, 2, o 3.")
-	}
-	return switcher.get(valor)
-
-	for a in range(0, 10, 1):
+while a < 10:
 	print("el valor de a es: " , a)
+	var = 5 - 5
 
-	for a in range(20, 10, -1):
-	print("el valor de a es: " , a)
-
-	while a < 10 or  not  not  not True:
-	print("el valor de a es: " , a)
-
-if __name__ == '__main__':
-	main()
 a = 1
 while True:
 	print("el valor de a es: " , a)
-	if a < 5 or a != 0:
+	a = a + 1
+	if a < 5:
 		break
+def myMetodo():
+	if a > 5:
+	print("a >5")
+
+	print("el valor de a es: " , a)
+	while a < 10:
+	print("el valor de a es: " , a)
+	var = 5 - 5
+
+
+def mifuncion(a, b):
+	var = "parametro"
+	print("el valor de a es: " , a)
+
